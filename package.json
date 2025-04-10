@@ -1,0 +1,11 @@
+{
+  "name": "asynq-node",
+  "keywords": [],
+  "author": {
+    "name": "CodeCarrot",
+    "url": "https://codecarrot.net"
+  },
+  "dependencies": {
+    "asynq": "link:../../packages/asynq"
+  }
+}

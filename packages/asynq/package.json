@@ -1,0 +1,38 @@
+{
+  "name": "asynq-node",
+  "version": "0.0.1",
+  "main": "src/index.ts",
+  "scripts": {
+    "gen:proto": "proto-loader-gen-types --longs=String --enums=String --keepCase=true --defaults=true --oneofs=true --grpcLib=@grpc/grpc-js --outDir=./src/types/asynq_pb ./proto/asynq.proto"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@grpc/grpc-js": "^1.13.2",
+    "@grpc/proto-loader": "^0.7.13",
+    "ioredis": "^5.6.0",
+    "protobufjs": "^7.4.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  },
+  "author": {
+    "name": "CodeCarrot",
+    "url": "https://codecarrot.net"
+  },
+  "keywords": [
+    "asynq",
+    "asynq-go",
+    "asynq-node",
+    "message queue",
+    "task queue",
+    "background jobs",
+    "worker pool",
+    "async tasks",
+    "queue",
+    "redis",
+    "valkey"
+  ]
+}
