@@ -1,5 +1,7 @@
 # Asynq Node
 
+[![NPM Version](https://img.shields.io/npm/v/asynq-node?label=asynq-node)](https://www.npmjs.com/package/asynq-node)
+
 > [Asynq](https://github.com/hibiken/asynq) is a Go library for queueing tasks and processing them asynchronously with workers. It's backed by Redis and is designed to be scalable yet easy to get started.
 >
 > Highlevel overview of how Asynq works:
