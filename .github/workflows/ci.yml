@@ -1,4 +1,4 @@
-name: Test
+name: CI
 
 on:
   push:
@@ -105,3 +105,29 @@ jobs:
         run: |
           cd ./packages/asynq
           pnpm test
+
+  publish-npm:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref_type == 'tag' && startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 9.6.0
+
+      - name: Set publishing config
+        run: pnpm config set '//registry.npmjs.org/:_authToken' "${NODE_AUTH_TOKEN}"
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.PKG_NPM_TOKEN}}
+
+      - run: |
+          pnpm --filter asynq-node publish --no-git-checks --access=public
