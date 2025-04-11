@@ -75,17 +75,17 @@ jobs:
         with:
           node-version: ${{ matrix.version }}
 
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
-
       - uses: pnpm/action-setup@v4
         name: Install pnpm
         id: pnpm-install
         with:
           version: 9
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v4
         with:
