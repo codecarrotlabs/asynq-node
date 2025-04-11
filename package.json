@@ -5,7 +5,7 @@
     "name": "CodeCarrot",
     "url": "https://codecarrot.net"
   },
-  "dependencies": {
-    "asynq": "link:../../packages/asynq"
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4"
   }
 }

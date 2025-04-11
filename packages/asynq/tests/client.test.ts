@@ -1,11 +1,11 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import Redis from 'ioredis';
-import { AsynqClient } from '../src/client';
+import { describe, it, expect, beforeAll, afterAll } from "vitest";
+import Redis from "ioredis";
+import { AsynqClient } from "../src/client";
 
-describe('AsynqClient', () => {
+describe("AsynqClient", () => {
   let client: AsynqClient;
   let redis: Redis.Redis;
-  let dbUrl = process.env.DB_URL as string
+  let dbUrl = process.env.DB_URL as string;
 
   beforeAll(() => {
     redis = new Redis(dbUrl);
@@ -17,9 +17,9 @@ describe('AsynqClient', () => {
     await redis.quit();
   });
 
-  it('should enqueue a task successfully', async () => {
-    const taskType = 'email:welcome';
-    const payload = { userId: 123, name: 'John Doe' };
+  it("should enqueue a task successfully", async () => {
+    const taskType = "email:welcome";
+    const payload = { userId: 123, name: "John Doe" };
     const options = { processAt: new Date(Date.now() + 10_000) };
 
     const taskId = await client.enqueue(taskType, payload, options);
@@ -31,8 +31,8 @@ describe('AsynqClient', () => {
     expect(tasks.length).toBe(1);
   });
 
-  it('should enqueue a task to the default queue if no queue is specified', async () => {
-    const taskType = 'email:reminder';
+  it("should enqueue a task to the default queue if no queue is specified", async () => {
+    const taskType = "email:reminder";
     const payload = { userId: 456 };
 
     const taskId = await client.enqueue(taskType, payload);
