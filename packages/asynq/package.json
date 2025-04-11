@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "main": "src/index.ts",
   "scripts": {
+    "test": "vitest run",
     "gen:proto": "proto-loader-gen-types --longs=String --enums=String --keepCase=true --defaults=true --oneofs=true --grpcLib=@grpc/grpc-js --outDir=./src/types/asynq_pb ./proto/asynq.proto"
   },
   "license": "MIT",
@@ -15,8 +16,10 @@
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
+    "@vitest/coverage-c8": "^0.33.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "vitest": "^3.1.1"
   },
   "author": {
     "name": "CodeCarrot",

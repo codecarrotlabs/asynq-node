@@ -5,7 +5,7 @@ import type {TaskMessage} from "../types/asynq_pb/asynq/TaskMessage";
 
 const protoPath = path.resolve(
   __dirname,
-  '../../../proto/asynq.proto',
+  '../../proto/asynq.proto',
 );
 
 export async function encodeMessage(message: TaskMessage) {
