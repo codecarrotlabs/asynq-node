@@ -25,6 +25,10 @@
     "name": "CodeCarrot",
     "url": "https://codecarrot.net"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codecarrotlabs/asynq-node"
+  },
   "keywords": [
     "asynq",
     "asynq-go",
