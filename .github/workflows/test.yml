@@ -4,23 +4,18 @@ on:
   push:
 
 jobs:
-  test:
-    name: Test v${{ matrix.version }} with ${{ matrix.db }}
+  test-redis:
+    name: Test v${{ matrix.version }} with Redis
     runs-on: ubuntu-latest
     services:
       redis:
         image: redis
         ports:
           - 6379:6379
-      valkey:
-        image: valkey/valkey
-        ports:
-          - 6378:6379
 
     strategy:
       matrix:
         version: [18, 20, 22]
-        db: [redis, valkey]
 
     steps:
       - uses: actions/checkout@v4
@@ -35,18 +30,42 @@ jobs:
         with:
           version: 9
 
-      - name: Run tests for Redis
-        if: ${{ matrix.db == 'redis' }}
+      - name: Run tests
         env:
           DB_URL: redis://localhost:6379
         run: |
-          cd ./packages/asynq;
+          cd ./packages/asynq
           pnpm test
 
-      - name: Run tests for Valkey
-        if: ${{ matrix.db == 'valkey' }}
+  test-valkey:
+    name: Test v${{ matrix.version }} with Valkey
+    runs-on: ubuntu-latest
+    services:
+      valkey:
+        image: valkey/valkey
+        ports:
+          - 6379:6379
+
+    strategy:
+      matrix:
+        version: [18, 20, 22]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.version }}
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 9
+
+      - name: Run tests
         env:
-          DB_URL: redis://localhost:6378
+          DB_URL: redis://localhost:6379
         run: |
-          cd ./packages/asynq;
+          cd ./packages/asynq
           pnpm test
