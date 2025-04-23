@@ -130,4 +130,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.PKG_NPM_TOKEN}}
 
       - run: |
+          # Build package 
+          pnpm --filter asynq-node build;
+          
           pnpm --filter asynq-node publish --no-git-checks --access=public
