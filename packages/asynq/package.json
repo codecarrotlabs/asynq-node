@@ -7,7 +7,7 @@
   "scripts": {
     "test": "vitest run",
     "gen:proto": "proto-loader-gen-types --longs=String --enums=String --keepCase=true --defaults=true --oneofs=true --grpcLib=@grpc/grpc-js --outDir=./src/types/asynq_pb ./proto/asynq.proto",
-    "build": "tsup src/index.ts --format cjs,esm --dts --out-dir dist"
+    "build": "tsup"
   },
   "license": "MIT",
   "dependencies": {
@@ -25,6 +25,14 @@
     "typescript": "^5.8.2",
     "vitest": "^3.1.1"
   },
+  "files": [
+    "dist",
+    "proto",
+    "tsconfig.json",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ],
   "author": {
     "name": "CodeCarrot",
     "url": "https://codecarrot.net"
