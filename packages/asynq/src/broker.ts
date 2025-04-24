@@ -55,10 +55,11 @@ export class Broker {
     if (!this.queuesPublished.has(msg.queue)) {
       try {
         await this.client.sadd(AllQueues, msg.queue);
-        this.queuesPublished.set(msg.queue, true);
       } catch (err) {
         throw new Error(`${op} 'sadd' ${(err as Error).message}`);
       }
+
+      this.queuesPublished.set(msg.queue, true);
     }
 
     const keys = [taskKey(msg.queue, msg.id), pendingKey(msg.queue)];
