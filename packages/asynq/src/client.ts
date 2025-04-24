@@ -87,15 +87,15 @@ export class AsynqClient {
     //   state = TaskState.aggregating;
     } else {
       opts.processAt = now;
-      this._enqueue(msg, opts.uniqueTTL);
+      await this._enqueue(msg, opts.uniqueTTL);
       state = TaskState.pending;
     }
 
     return new TaskInfo(msg, state, opts.processAt);
   }
 
-  private _enqueue(msg: TaskMessage, uniqueTTL: number) {
-    this.broker.enqueue(msg);
+  private async _enqueue(msg: TaskMessage, uniqueTTL: number) {
+    await this.broker.enqueue(msg);
   }
 
   private composeOptions(opts?: Partial<EnqueueOptions>) {
