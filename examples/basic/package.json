@@ -1,6 +1,5 @@
 {
   "name": "basic",
-  "type": "commonjs",
   "dependencies": {
     "asynq-node": "link:../../packages/asynq"
   },
