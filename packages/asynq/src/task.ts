@@ -1,6 +1,10 @@
 type PayloadValue = string | number | boolean | null | undefined;
 
-type Payload = Record<string, PayloadValue>;
+type Payload =
+  | PayloadValue
+  | {
+      [key: string]: Payload;
+    };
 
 export enum TaskState {
   active = 1,
