@@ -1,7 +1,7 @@
 import { Task, AsynqClient, type TaskInfo } from "asynq-node";
 
 const main = async () => {
-  const client = new AsynqClient("redis://localhost:1000");
+  const client = new AsynqClient("redis://localhost:6379");
 
   const task = new Task("email:welcome", {
     userId: 123,

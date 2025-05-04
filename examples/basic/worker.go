@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/hibiken/asynq"
 	"log"
 )
@@ -12,7 +13,7 @@ const (
 	TypeImageResize   = "image:resize"
 )
 
-const redisAddr = "localhost:1000"
+const redisAddr = "localhost:6379"
 
 func main() {
 	srv := asynq.NewServer(asynq.RedisClientOpt{Addr: redisAddr}, asynq.Config{})
