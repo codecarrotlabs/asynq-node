@@ -1,3 +1,5 @@
+import type { EnqueueOptions } from "./types/types";
+
 type PayloadValue = string | number | boolean | null | undefined;
 
 type Payload =
@@ -19,11 +21,16 @@ export enum TaskState {
 export class Task {
   typeName: string;
   payloadVar: Buffer;
-  // TODO: opts: Options
+  opts?: Partial<EnqueueOptions>;
 
-  constructor(typename: string, payload: Payload, opts?: unknown) {
+  constructor(
+    typename: string,
+    payload: Payload,
+    opts?: Partial<EnqueueOptions>,
+  ) {
     this.typeName = typename;
     this.payloadVar = Buffer.from(JSON.stringify(payload));
+    this.opts = opts;
   }
 
   get type(): string {

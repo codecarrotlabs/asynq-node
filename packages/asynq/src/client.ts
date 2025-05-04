@@ -5,17 +5,13 @@ import type { EnqueueOptions, TaskMessage } from "./types/types";
 import * as base from "./helpers/base";
 import { TaskInfo } from "./taskInfo";
 import { Broker } from "./broker";
-import { defaultQueueName } from "./helpers/constants";
-
-// Default max retry count used if nothing is specified.
-const defaultMaxRetry = 25;
-
-// Default timeout used if both timeout and deadline are not specified (in milliseconds)
-const defaultTimeoutInMS = 1000 * 60 * 30;
-
-// Value zero indicates no timeout and no deadline.
-const noTimeout = 0;
-const noDeadline = 0;
+import {
+  defaultMaxRetry,
+  defaultQueueName,
+  defaultTimeoutInMS,
+  noDeadline,
+  noTimeout,
+} from "./helpers/options";
 
 export class AsynqClient {
   private broker: Broker;
@@ -35,7 +31,7 @@ export class AsynqClient {
     }
 
     // TODO: merge task options with the options provided at enqueue time.
-    const opts = this.composeOptions(options);
+    const opts = this.composeOptions(task.opts, options);
 
     let deadline = noDeadline;
     if (options?.deadline !== 0) {
@@ -81,10 +77,10 @@ export class AsynqClient {
     if (opts?.processAt && opts.processAt > now) {
       // schedule task
       state = TaskState.scheduled;
-    // } else if (opts.group !== "") {
-    //   // TODO: handle group logic
-    //   // Use zero value for processAt since we don't know when the task will be aggregated and processed.
-    //   state = TaskState.aggregating;
+      // } else if (opts.group !== "") {
+      //   // TODO: handle group logic
+      //   // Use zero value for processAt since we don't know when the task will be aggregated and processed.
+      //   state = TaskState.aggregating;
     } else {
       opts.processAt = now;
       await this._enqueue(msg, opts.uniqueTTL);
@@ -98,7 +94,10 @@ export class AsynqClient {
     await this.broker.enqueue(msg);
   }
 
-  private composeOptions(opts?: Partial<EnqueueOptions>) {
+  private composeOptions(
+    taskOpts?: Partial<EnqueueOptions>,
+    enqueueOpts?: Partial<EnqueueOptions>,
+  ) {
     const res: EnqueueOptions = {
       retry: defaultMaxRetry,
       queue: defaultQueueName,
@@ -111,57 +110,64 @@ export class AsynqClient {
       retention: 0,
     };
 
-    // Retry
-    if (opts?.retry) {
-      res.retry = opts.retry;
-    }
+    function processOptions(opts?: Partial<EnqueueOptions>) {
+      if (!opts) return;
 
-    // Queue
-    if (opts?.group) {
-      const qname = opts.queue || "";
-      base.validateQueueName(qname);
-      res.queue = qname;
-    }
-
-    // task id
-    if (opts?.taskID) {
-      if (opts.taskID.trim().length === 0) {
-        throw new Error("task ID cannot be empty");
+      // Retry
+      if (opts?.retry) {
+        res.retry = opts.retry;
       }
 
-      res.taskID = opts.taskID.trim();
-    }
-
-    // timeout
-    if (opts?.timeout) {
-      res.timeout = opts.timeout;
-    }
-
-    // duration
-    if (opts?.deadline) {
-      res.deadline = opts.deadline;
-    }
-
-    // unique TTL
-    if (opts?.uniqueTTL) {
-      if (opts.uniqueTTL < 1) {
-        throw new Error("Unique TTL cannot be less than 1s");
+      // Queue
+      if (opts?.group) {
+        const qname = opts.queue || "";
+        base.validateQueueName(qname);
+        res.queue = qname;
       }
-      res.uniqueTTL = opts.uniqueTTL;
-    }
 
-    // group
-    if (opts?.group) {
-      if (opts.group.trim().length === 0) {
-        throw new Error("group key cannot be empty");
+      // task id
+      if (opts?.taskID) {
+        if (opts.taskID.trim().length === 0) {
+          throw new Error("task ID cannot be empty");
+        }
+
+        res.taskID = opts.taskID.trim();
       }
-      res.group = opts.group.trim();
+
+      // timeout
+      if (opts?.timeout) {
+        res.timeout = opts.timeout;
+      }
+
+      // deadline
+      if (opts?.deadline) {
+        res.deadline = opts.deadline;
+      }
+
+      // unique TTL
+      if (opts?.uniqueTTL) {
+        if (opts.uniqueTTL < 1) {
+          throw new Error("Unique TTL cannot be less than 1s");
+        }
+        res.uniqueTTL = opts.uniqueTTL;
+      }
+
+      // group
+      if (opts?.group) {
+        if (opts.group.trim().length === 0) {
+          throw new Error("group key cannot be empty");
+        }
+        res.group = opts.group.trim();
+      }
+
+      // retention
+      if (opts?.retention) {
+        res.retention = opts.retention;
+      }
     }
 
-    // retention
-    if (opts?.retention) {
-      res.retention = opts.retention;
-    }
+    processOptions(enqueueOpts);
+    processOptions(taskOpts);
 
     return res;
   }
